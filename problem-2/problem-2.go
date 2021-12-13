@@ -4,9 +4,9 @@ import (
 	"os"
 	"log"
 	"fmt"
-	"bufio"
+	"bufio"	
+	"strings"
 	"strconv"
-	
 )
 
 type Position struct {
@@ -28,4 +28,31 @@ func main(){
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		command := scanner.Text()
+		pos = processCommand(pos, command)
+	}
+
+	fmt.Println(pos.horizontal*pos.vertical);
+}
+
+func processCommand(pos Position, input string) Position{
+	command := strings.Fields(input)
+	value, err := strconv.Atoi(command[1])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	direction := command[0]
+	switch {
+	case direction == "up":
+		pos.vertical -= value
+	case direction == "down":
+		pos.vertical += value
+	case direction == "forward":
+		pos.horizontal += value
+	}
+	log.Println(pos)
+	return pos
 }
