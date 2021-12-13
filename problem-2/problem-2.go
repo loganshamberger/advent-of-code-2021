@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"log"
-	"fmt"
 	"bufio"	
 	"strings"
 	"strconv"
@@ -12,15 +11,17 @@ import (
 type Position struct {
 	vertical  int
 	horizontal int
+	aim int
 }
 
 func main(){
 	pos := Position {
 		vertical: 0,
 		horizontal: 0,
+		aim: 0,
 	}
 
-	file, err := os.Open("input.txt")
+	file, err := os.Open("test.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +35,7 @@ func main(){
 		pos = processCommand(pos, command)
 	}
 
-	fmt.Println(pos.horizontal*pos.vertical);
+	log.Println(pos.horizontal*pos.vertical)
 }
 
 func processCommand(pos Position, input string) Position{
@@ -48,10 +49,13 @@ func processCommand(pos Position, input string) Position{
 	switch {
 	case direction == "up":
 		pos.vertical -= value
+		pos.aim -= value
 	case direction == "down":
 		pos.vertical += value
+		pos.aim += value
 	case direction == "forward":
 		pos.horizontal += value
+		pos.vertical += value*pos.aim
 	}
 	log.Println(pos)
 	return pos
