@@ -13,6 +13,13 @@ var mapping = map[string]string{
 	"}" : "{",
 }
 
+var autoCompleteMapping = map[string]string{
+	"(" : ")",
+	"[" : "]",
+	"<" : ">",
+	"{" : "}",
+}
+
 
 func LegalChunk(chunk string) (res bool, illegal string) {
 	chars := []rune(chunk)
@@ -34,5 +41,17 @@ func LegalChunk(chunk string) (res bool, illegal string) {
 		}
 	}
 	return true, ""
+}
+
+func AutoComplete(chunk string) (res string) {
+	input := strings.Split(chunk, "")
+	var completion [] string
+
+	n := len(input)-1
+	for i := n; i>=0; i--{
+		completion = append(completion, autoCompleteMapping[input[i]])
+		input = input[:n]
+	}
+	return strings.Join(completion,"")
 }
 
