@@ -1,4 +1,4 @@
-package chunk_utils
+package main
 
 import (
 	"strings"
