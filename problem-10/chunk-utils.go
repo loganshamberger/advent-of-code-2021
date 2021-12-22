@@ -1,6 +1,9 @@
 package chunk_utils
 
-import "strings"
+import (
+	"strings"
+	"fmt"
+)
 
 var opening = "({<["
 var mapping = map[string]string{
@@ -9,10 +12,13 @@ var mapping = map[string]string{
 	">" : "<",
 	"}" : "{",
 }
-func LegalChunk(chunk string) (res bool) {
+
+
+func LegalChunk(chunk string) (res bool, illegal string) {
 	chars := []rune(chunk)
 	var stack []string
 	var n int
+	fmt.Printf("Analyzing %s \n", chunk)
 	for i := 0; i < len(chars); i++ {
 		char := string(chars[i])
 		if (strings.Contains(opening, char)) {
@@ -22,13 +28,11 @@ func LegalChunk(chunk string) (res bool) {
 			if (mapping[char] == stack[n]) {
 				stack = stack[:n]
 			} else {
-				return false
+				fmt.Printf("Chunk %s Corrupted \n", chunk)
+				return false, char
 			}
 		}
 	}
-	if len(stack) == 0 {
-		return true
-	}else {
-		return false
-	}
+	return true, ""
 }
+
