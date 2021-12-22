@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"os"
 	"log"
+	"sort"
 )
 
 var score = map[string]int64{
@@ -24,17 +25,26 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
+	var inputs []string
 	syntaxScore := 0
 	for scanner.Scan() {
 		readIn := scanner.Text()
-		
-		legal, char := LegalChunk(readIn)
-		if (!legal && char != "") {
-			syntaxScore += int(score[char])
-		}
-	
+		inputs = append(inputs,readIn)	
 	}
 
-	fmt.Printf("Syntax score is %d", syntaxScore)
+	var autoCompleteScores []int
+
+	for _, line := range inputs {
+		legal, char := LegalChunk(line)
+			if (!legal && char != "") {
+				syntaxScore += int(score[char])
+			} else {
+				autoCompleteScores = append(autoCompleteScores, AutoCompletionScore(line))
+			}
+		}
+	fmt.Printf("Syntax score is %d \n", syntaxScore)
+	sort.Ints(autoCompleteScores)
+	fmt.Println(autoCompleteScores[len(autoCompleteScores)/2])
 	
+		
 }

@@ -1,3 +1,3 @@
-module problem-10
+module problem10
 
 go 1.17

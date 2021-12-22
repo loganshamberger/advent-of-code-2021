@@ -12,7 +12,7 @@ type chunkTest struct {
 
 type autoCompleteTest struct {
 	input string
-	expectedCompletion string
+	expectedCompletionScore int
 }
 var chunkTests = []chunkTest {
 	chunkTest{"()",true, ""},
@@ -24,9 +24,10 @@ var chunkTests = []chunkTest {
 }
 
 var autoCompleteTests = []autoCompleteTest{
-	autoCompleteTest{"<",">"},
-	autoCompleteTest{"{[", "]}"},
-	autoCompleteTest{"[({(<(())[]>[[{[]{<()<>>", "}}]])})]"},
+	autoCompleteTest{"<",4},
+	autoCompleteTest{"<[",14},
+	autoCompleteTest{"<[]",4},
+	autoCompleteTest{"[({(<(())[]>[[{[]{<()<>>",288957},
 }
 
  
@@ -39,11 +40,11 @@ func TestLegal(t *testing.T) {
 	}
 }
 
-func TestAutoComplete(t *testing.T) {
+func TestAutoCompleteScore(t *testing.T) {
 
 	for _, test := range autoCompleteTests {
-		if output := AutoComplete(test.input); output != test.expectedCompletion {
-			t.Errorf("Output %s not equal to expected %s", output, test.expectedCompletion)
+		if output := AutoCompletionScore(test.input); output != test.expectedCompletionScore {
+			t.Errorf("Output %d not equal to expected %d", output, test.expectedCompletionScore)
 		}
 	}
 }
